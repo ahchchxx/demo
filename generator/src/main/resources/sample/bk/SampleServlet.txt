@@ -1,0 +1,69 @@
+package com.cares.sh.servlet;
+
+import com.cares.sh.base.manager.ManagerContext;
+import com.cares.sh.base.manager.ManagerServlet;
+import com.cares.sh.comm.annotation.ServletAction;
+import com.cares.sh.comm.context.ServletContext;
+import com.cares.sh.comm.msg.Message;
+import com.cares.sh.comm.parm.Table;
+import com.cares.sh.entity.##ClassEntityName#;
+import com.cares.sh.service.##ClassServiceName#;
+
+public class ##ClassServletName# extends ManagerServlet {
+	private static final long serialVersionUID = 1L;
+
+	@ServletAction("query")
+	public void query(ServletContext<ManagerContext> context) {
+		Table table = ##ClassServiceName#.queryTable();
+		
+		context.getRet().addParm(table);
+	}
+	
+	@ServletAction("single")
+	public void getSingle(ServletContext<ManagerContext> context) {		
+		int id = context.getInput().getParm("##pkFieldCamel#").toInt();
+		##ClassEntityName# user = ##ClassServiceName#.getSingle(id);
+		if(user == null) {
+			context.getRet().setError(Message.MESSAGE_RECORD_NOT_EXIST);
+			return;
+		}
+		
+		this.writeDataFromBean(user, context.getRet());
+	}
+	
+	@ServletAction("insert")
+	public void insert(ServletContext<ManagerContext> context) {
+		int count = ##ClassServiceName#.insert(context.getInput());
+		if(count < 1) {
+			context.getRet().setError(Message.MESSAGE_SAVE_DATA_ERROR);
+			return;
+		}
+		context.getRet().addParm(count);
+	}
+	@ServletAction("update")
+	public void update(ServletContext<ManagerContext> context) {
+		int count = ##ClassServiceName#.update(context.getInput());
+		if(count < 1) {
+			context.getRet().setError(Message.MESSAGE_SAVE_DATA_ERROR);
+			return;
+		}
+		context.getRet().addParm(count);
+	}
+	
+	@ServletAction("delete")
+	public void delete(ServletContext<ManagerContext> context) {
+		int id = context.getInput().getParm("##pkFieldCamel#").toInt();
+		int count = ##ClassServiceName#.delete(id);
+		if(count < 1) {
+			context.getRet().setError(Message.MESSAGE_RECORD_NOT_EXIST);
+			return;
+		}
+		context.getRet().addParm(count);
+	}
+	
+	@ServletAction("count")
+	public void count(ServletContext<ManagerContext> context) {
+		int count = ##ClassServiceName#.getCount();
+		context.getRet().addParm(count);
+	}
+}

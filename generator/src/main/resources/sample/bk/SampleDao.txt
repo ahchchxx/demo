@@ -1,0 +1,60 @@
+package com.cares.sh.dao;
+
+import java.util.ArrayList;
+import java.util.List;
+import com.cares.sh.comm.db.DBHelper;
+import com.cares.sh.comm.parm.Table;
+import com.cares.sh.entity.##ClassEntityName#;
+
+public class ##ClassNameSuffix# {
+	public static List<##ClassEntityName#> queryList() {
+		String sqlStr = "select * from ##tableName#";
+		
+		List<##ClassEntityName#> list = DBHelper.executeQueryList(sqlStr, null, ##ClassEntityName#.class);
+		
+		return list;
+	}
+	public static Table queryTable(){
+		String sqlStr = "select * from ##tableName#";
+		
+		return DBHelper.executeQueryTable(sqlStr, null);
+	}
+	
+	public static ##ClassEntityName# getSingle(int ##pkFieldCamel#) {
+		String sqlStr = "select * from ##tableName# where ##pkField# = ?";
+		List<Object> params = new ArrayList<>();
+		params.add(##pkFieldCamel#);
+		
+		return DBHelper.getSingleObject(sqlStr, params, ##ClassEntityName#.class);
+	}
+
+	public static int insert(##ClassEntityName# bean) {
+    	String sqlStr = "insert into ##tableName#(##beanFields) values(##beanFieldsInsert#)";
+    	List<Object> params = new ArrayList<>();
+		##beanFiledsParams#
+
+    	return DBHelper.excuteNonQuery(sqlStr, params);
+    }
+	public static int update(##ClassEntityName# bean) {
+    	String sqlStr = "update ##tableName# set ##beanFieldsUpdate# where ##pkField#=?";
+    	List<Object> params = new ArrayList<>();
+		##beanFiledsParams#
+    	params.add(bean.##pkFieldCamel#);
+    	
+    	return DBHelper.excuteNonQuery(sqlStr, params);
+    }
+
+	public static int delete(int ##pkFieldCamel#) {
+		String sqlStr = "delete from ##tableName# where ##pkField# = ?";
+		List<Object> params = new ArrayList<>();
+		params.add(##pkFieldCamel#);
+		
+		return DBHelper.excuteNonQuery(sqlStr, params);
+    }
+	
+	public static int getCount() {
+    	String sqlStr = "select count(*) from ##tableName#";
+    	
+    	return DBHelper.executeScalar(sqlStr, null).toInt();
+	}
+}

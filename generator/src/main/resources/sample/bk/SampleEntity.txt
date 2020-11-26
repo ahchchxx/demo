@@ -1,0 +1,14 @@
+package com.cares.sh.entity;
+
+##importDate#
+
+public class ##ClassNameSuffix# { // extends BaseBean {
+	##Fields#
+
+	##GetSet#
+	
+	@Override
+	public String toString() {
+		##toStringStr#
+	}
+}

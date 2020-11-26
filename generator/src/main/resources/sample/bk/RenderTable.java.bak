@@ -1,0 +1,171 @@
+package com.cares.sh.comm.generate;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.util.HashMap;
+
+import com.cares.sh.comm.db.DBHelper;
+import com.cares.sh.comm.tool.StringUnit;
+
+public class RenderTable {
+
+	public static void createEntity(String tableName, String filePath, String suffixStr) throws Exception {
+		//Connection l_conn = aCreateClass.getConn();
+		Connection l_conn = DBHelper.getConnection();
+
+		// 表名
+		String table_name = tableName.toLowerCase();// "hr_org";
+		// 类名，驼峰命名法，首字母大写
+		String ClassName = StringUnit.getCamelName(tableName, true);
+		String ClassNameEntity = ClassName + suffixStr;
+		String fileName = filePath + ClassNameEntity + ".java";
+
+		// 数据表，原数据，字段的备注
+//		ResultSet rs = l_conn.getMetaData().getColumns(null, null, table_name.toUpperCase(), null);
+		HashMap<String, String> remarks = new HashMap<String, String>();
+		while (rs.next()) {
+			remarks.put(rs.getString("column_name").toLowerCase(), rs.getString("remarks"));
+		}
+		
+//		ResultSet l_rset = l_conn.prepareStatement("select * from " + table_name).executeQuery();
+		
+		// 主键
+		//ResultSet l_column_key = l_conn.getMetaData().getPrimaryKeys(null, "%", table_name.toUpperCase());// oracle
+		ResultSet l_column_key = l_conn.getMetaData().getPrimaryKeys(null, null, table_name.toUpperCase());
+		HashMap<String, String> l_pri = new HashMap<String, String>();
+		while (l_column_key.next()) {
+			for (int i = 1; i <= l_column_key.getMetaData().getColumnCount(); i++) {
+				l_pri.put(l_column_key.getString("column_name").toLowerCase(), "");
+			}
+		}
+		//if (l_pri.size() < 1) {
+			// sb.append("该表没有主键不可以生成！");
+			// return;
+		//}
+		
+		boolean l_date = false;// 有无时间类型
+		for (int i = 1; i <= l_rset.getMetaData().getColumnCount(); i++) {
+			if (l_rset.getMetaData().getColumnClassName(i).equals("java.sql.Timestamp")) {
+				l_date = true;
+				break;
+			}
+		}
+
+		// 拼字符串
+		MyStringBuilder sb = new MyStringBuilder();
+		sb.appendLine("package com.cares.sh.entity;");
+		sb.append("\n\n");
+		if (l_date) {
+			sb.appendLine("import java.util.Date;");
+		}
+		sb.append("\n");
+
+		// 类名的注解
+//		sb.appendLine("@Table(tablename=\"" + table_name + "\")");
+		
+		// 类名
+		sb.appendLine("public class " + ClassNameEntity + " { // extends BaseBean {");
+		for (int i = 1; i <= l_rset.getMetaData().getColumnCount(); i++) {
+			String col_name = l_rset.getMetaData().getColumnName(i).toLowerCase();
+			String colName = StringUnit.getCamelName(col_name, false);
+			
+			// 变量备注
+//			String remark = remarks.get(col_name);
+//			if (null != remark && !"".equals(remark)) {
+//				sb.appendLine("	//" + remark);
+//			}
+			
+			// 变量注解
+//			String l_line = "	@Column(name=\"" + col_name + "\"";
+//			if (l_rset.getMetaData().isNullable(i) == ResultSetMetaData.columnNoNulls) {
+//				l_line += ", isnull=false";
+//			}
+//			if (l_pri.containsKey(col_name)) {
+//				l_line += ", isprkey=true";
+//			}
+//			if (l_rset.getMetaData().getColumnClassName(i).equals("java.lang.String")) {
+//				l_line += ", maxlen=" + l_rset.getMetaData().getColumnDisplaySize(i);
+//			}
+//			l_line += ", filed=\"" + colName;
+//			l_line += "\")";
+//			sb.appendLine(l_line);
+			
+			// 变量定义，设默认值
+			String l_line = "	public ";//private
+//			if (l_rset.getMetaData().getColumnClassName(i).equals("java.sql.Timestamp")) {
+//				l_line += "Date " + colName + ";";
+//			} else if (l_rset.getMetaData().getColumnClassName(i).equals("java.lang.String")) {
+//				l_line += "String " + colName + "=\"\";";
+//			} else if (l_rset.getMetaData().getScale(i) > 0) {
+//				l_line += "double " + colName + "=0;";
+//			} else {
+//				l_line += "long " + colName + "=0;";
+//			}
+			// 不设默认值
+			l_line += TypeHelper.getTypeFromDb2Java(l_rset.getMetaData(), i);
+			l_line += " " + colName + ";";
+			sb.appendLine(l_line);
+			
+			sb.append("\n");
+		}
+		sb.append("\n");
+		
+		// get、set
+		for (int i = 1; i <= l_rset.getMetaData().getColumnCount(); i++) {
+			String colName = l_rset.getMetaData().getColumnName(i).toLowerCase();
+			
+			String l_name = StringUnit.getCamelName(colName, true);
+			String l_name1 = StringUnit.getCamelName(colName, false);
+			
+			//String l_type = TypeHelper.getTypeFromDb2Java(l_rset.getMetaData().getColumnClassName(i));
+			String l_type = TypeHelper.getTypeFromDb2Java(l_rset.getMetaData(), i);
+
+//			String remark = remarks.get(colName);
+//			if (null != remark && !"".equals(remark)) {
+//				sb.appendLine("	/**");
+//				sb.appendLine("	* 获取 " + remark);
+//				sb.appendLine("	*/");
+//			}
+			sb.appendLine("	public " + l_type + " get" + l_name + "(){");
+			sb.appendLine("		return " + l_name1 + ";");
+			sb.appendLine("	}");
+//			if (null != remark && !"".equals(remark)) {
+//				sb.appendLine("	/**");
+//				sb.appendLine("	* 设置 " + remark);
+//				sb.appendLine("	*/");
+//			}
+			sb.appendLine("	public void set" + l_name + "(" + l_type + " " + l_name1 + "){");
+			sb.appendLine("		this." + l_name1 + " = " + l_name1 + ";");
+			sb.appendLine("	}");
+			
+			sb.append("\n");
+		}
+		sb.append("\n");
+		
+		// toString()
+		sb.appendLine("	@Override");
+		sb.appendLine("	public String toString() {");
+		sb.append("		return \"" + ClassNameEntity + " [\"");
+		for (int i = 1; i <= l_rset.getMetaData().getColumnCount(); i++) {
+			String colName = l_rset.getMetaData().getColumnName(i).toLowerCase();
+			String l_name1 = StringUnit.getCamelName(colName, false);
+			
+//			return "FfpMember ["
+//				+ "memberId=" + memberId
+//				+ ", memberGradeNo=" + memberGradeNo
+//				+ "]";
+			if(i == 1){
+				sb.append(" + \"" + l_name1 + "=\" + " + l_name1);
+			}else{
+				sb.append(" + \", " + l_name1 + "=\" + " + l_name1);
+			}
+		}
+		sb.appendLine(" + \"]\";");
+		sb.appendLine("	}");
+	    
+		sb.append("}");
+		
+		// 输出内容
+		FileHelper.writeFile(fileName, tableName, sb.toString());
+	}
+}

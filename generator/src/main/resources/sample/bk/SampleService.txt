@@ -1,0 +1,51 @@
+package com.cares.sh.service;
+
+import java.util.List;
+import com.cares.sh.base.BaseService;
+import com.cares.sh.comm.parm.CommandData;
+import com.cares.sh.comm.parm.Table;
+import com.cares.sh.dao.##ClassDaoName#;
+import com.cares.sh.entity.##ClassEntityName#;
+
+public class ##ClassServiceName# extends BaseService {
+	// 查
+	public static List<##ClassEntityName#> queryList(){
+		return ##ClassDaoName#.queryList();
+	}
+	public static Table queryTable(){
+		return ##ClassDaoName#.queryTable();
+	}
+	
+	// 查单个
+	public static ##ClassEntityName# getSingle(int ##pkFieldCamel#) {
+		return ##ClassDaoName#.getSingle(##pkFieldCamel#);
+	}
+	
+	// 增
+	public static int insert(CommandData data) {
+		##ClassEntityName# bean = new ##ClassEntityName#();
+		readData(data, bean);
+		
+		return ##ClassDaoName#.insert(bean);
+	}
+	// 改
+	public static int update(CommandData data) {
+		int id = data.getParm("##pkFieldCamel#").toInt();
+		##ClassEntityName# bean = ##ClassDaoName#.getSingle(id);
+		if(bean == null) {
+			return 0;
+		}
+		readData(data, bean);
+		
+		return ##ClassDaoName#.update(bean);
+	}
+	
+	// 删
+	public static int delete(int ##pkFieldCamel#) {
+		return ##ClassDaoName#.delete(##pkFieldCamel#);
+	}
+	
+	public static int getCount() {
+		return ##ClassDaoName#.getCount();
+	}
+}

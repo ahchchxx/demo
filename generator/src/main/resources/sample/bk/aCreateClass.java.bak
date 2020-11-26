@@ -1,0 +1,352 @@
+package com.cares.sh.comm.generate;
+
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.cares.sh.comm.db.DBHelper;
+import com.cares.sh.comm.tool.StringUnit;
+
+public class aCreateClass {
+	public static void main(String[] args) throws Exception {
+
+		//String packageName = "com.cares.sh.bean";
+		//List<Class<?>> list = getClasses(packageName);// 获取，包下面的类
+		
+		// 创建 单个表的实体
+		String tableName = "tmp_test2";
+		String fileName = "E:\\CodeRender\\a.java";
+		createClassFile(tableName, fileName);
+		
+		// 显示 数据库中所有的表
+//		String userName = "KNFLP";
+//		showAllTables(userName);
+
+		// TODO 自动生成
+		// 生成 单个表的 dao
+		
+		// 生成 单个表的 CRUD， xml 文件
+		
+	}
+
+	public static void showAllTables(String userName) throws Exception{
+		Connection conn = DBHelper.getConnection();
+		DatabaseMetaData metaData = conn.getMetaData();
+		
+		//String userName = "KNFLP";
+		if("".equals(userName)){
+			return;
+		}else{
+			userName = userName.toUpperCase();
+		}
+		
+		ResultSet rs = metaData.getTables(conn.getCatalog(), userName, null, new String[]{"TABLE"});
+		while(rs.next()) {
+			if(userName.equals(rs.getString("TABLE_SCHEM"))){// 刷选表
+			    print(rs.getString("TABLE_NAME"));
+			    print("\t");
+			    print(rs.getString("REMARKS"));
+			    println("");
+			}
+		}
+	}
+	
+	/**
+	 * 将一个未处理的ResultSet解析为Map列表.
+	 * 
+	 * @param rs
+	 * @return
+	 */
+	public static List<Map<String, Object>> parseResultSetToMapList(ResultSet rs) {
+		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+		if (null == rs) {
+			return null;
+		}
+		try {
+			while (rs.next()) {
+				Map<String, Object> map = parseResultSetToMap(rs);
+				if (null != map) {
+					result.add(map);
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+
+	/**
+	 * 解析ResultSet的单条记录,不进行 ResultSet 的next移动处理
+	 * 
+	 * @param rs
+	 * @return
+	 */
+	private static Map<String, Object> parseResultSetToMap(ResultSet rs) {
+		if (null == rs) {
+			return null;
+		}
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			ResultSetMetaData meta = rs.getMetaData();
+			int colNum = meta.getColumnCount();
+			for (int i = 1; i <= colNum; i++) {
+				// 列名
+				String name = meta.getColumnLabel(i); // i+1
+				Object value = rs.getObject(i);
+				// 加入属性
+				map.put(name, value);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return map;
+	}
+	{
+		//自动生成 bean
+//		int count = 0;
+//		System.out.print("start \n");
+//		for (Class<?> cls : list) {// 遍历类
+//			if (cls.isAnnotationPresent(Table.class)) {
+//				Table annotation = cls.getAnnotation(Table.class);
+//				String tableName = annotation.tablename();
+//
+//				count++;// 打点，记录已完成个数
+//				System.out.print(count + "	");
+//
+//				String fileName = "D:\\CodeRender\\" + cls.getSimpleName() + ".java";
+//				createClassFile(tableName, fileName);
+//
+//				try {
+//					Thread.sleep(500);
+//				} catch (InterruptedException e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		}
+//		System.out.print("end \n");
+		
+		//调查 字段的统一性问题
+//		Boolean hasErr=false;
+//		String tempStr="";
+//		for(Class<?> cls:list){
+//			hasErr=false;
+//			tempStr="";
+//			
+//			for(Field field : cls.getDeclaredFields()) {
+//				if (field.isAnnotationPresent(Column.class)) {
+//					Column col=field.getAnnotation(Column.class);
+//					String dbFieldName=col.name();
+//					String javaFieldName=col.filed();
+//					if (!javaFieldName.equals(GetCamelName(dbFieldName))) {
+//						//System.out.println(cls.toString());
+//						hasErr=true;
+//						tempStr += dbFieldName +" - " +javaFieldName + "\r\n";
+//					}					
+//				}
+//			}
+//			if (hasErr) {
+//				System.out.println(cls.toString());
+//				System.out.println(tempStr);
+//			}
+//		}
+	}
+
+	public static void createClassFile(String tableName, String fileName) throws Exception {
+		//Connection l_conn = aCreateClass.getConn();
+		Connection l_conn = DBHelper.getConnection();
+
+		// 表名
+		String table_name = tableName.toLowerCase();// "hr_org";
+		// 类名，驼峰命名法，首字母大写
+		String ClassName = StringUnit.getCamelName(tableName, true);
+
+		// 数据表，原数据
+		ResultSet rs = l_conn.getMetaData().getColumns(null, "%", table_name.toUpperCase(), null);
+		// 字段的备注
+		HashMap<String, String> remarks = new HashMap<String, String>();
+		while (rs.next()) {
+			remarks.put(rs.getString("column_name").toLowerCase(), rs.getString("remarks"));
+		}
+		
+		ResultSet l_rset = l_conn.prepareStatement("select * from " + table_name).executeQuery();
+		
+		// 主键
+		ResultSet l_column_key = l_conn.getMetaData().getPrimaryKeys(null, "%", table_name.toUpperCase());// oracle
+		HashMap<String, String> l_pri = new HashMap<String, String>();
+		while (l_column_key.next()) {
+			for (int i = 1; i <= l_column_key.getMetaData().getColumnCount(); i++) {
+				l_pri.put(l_column_key.getString("column_name").toLowerCase(), "");
+			}
+		}
+		//if (l_pri.size() < 1) {
+			// sb.append("该表没有主键不可以生成！");
+			// return;
+		//}
+		
+		boolean l_date = false;// 有无时间类型
+		for (int i = 1; i <= l_rset.getMetaData().getColumnCount(); i++) {
+			if (l_rset.getMetaData().getColumnClassName(i).equals("java.sql.Timestamp")) {
+				l_date = true;
+				break;
+			}
+		}
+
+		// 拼字符串
+		MyStringBuilder sb = new MyStringBuilder();
+		sb.appendLine("package com.cares.sh.bean;");
+		sb.append("\n\n");
+//		sb.appendLine("import com.cares.sh.annotation.Column;");
+//		sb.appendLine("import com.cares.sh.annotation.Table;");
+//		sb.appendLine("import com.cares.sh.base.BaseBean;");
+		if (l_date) {
+			sb.appendLine("import java.util.Date;");
+		}
+		sb.append("\n");
+
+		// 类名的注解
+//		sb.appendLine("@Table(tablename=\"" + table_name + "\")");
+		
+		// 类名
+		sb.appendLine("public class " + ClassName + "{// extends BaseBean{");
+		for (int i = 1; i <= l_rset.getMetaData().getColumnCount(); i++) {
+			String col_name = l_rset.getMetaData().getColumnName(i).toLowerCase();
+			String colName = StringUnit.getCamelName(col_name, false);
+			
+			// 变量备注
+//			String remark = remarks.get(col_name);
+//			if (null != remark && !"".equals(remark)) {
+//				sb.appendLine("	//" + remark);
+//			}
+			
+			// 变量注解
+//			String l_line = "	@Column(name=\"" + col_name + "\"";
+//			if (l_rset.getMetaData().isNullable(i) == ResultSetMetaData.columnNoNulls) {
+//				l_line += ", isnull=false";
+//			}
+//			if (l_pri.containsKey(col_name)) {
+//				l_line += ", isprkey=true";
+//			}
+//			if (l_rset.getMetaData().getColumnClassName(i).equals("java.lang.String")) {
+//				l_line += ", maxlen=" + l_rset.getMetaData().getColumnDisplaySize(i);
+//			}
+//			l_line += ", filed=\"" + colName;
+//			l_line += "\")";
+//			sb.appendLine(l_line);
+			
+			// 变量定义
+			String l_line = "	private ";
+			if (l_rset.getMetaData().getColumnClassName(i).equals("java.sql.Timestamp")) {
+				l_line += "Date " + colName + ";";
+			} else if (l_rset.getMetaData().getColumnClassName(i).equals("java.lang.String")) {
+				l_line += "String " + colName + "=\"\";";
+			} else if (l_rset.getMetaData().getScale(i) > 0) {
+				l_line += "double " + colName + "=0;";
+			} else {
+				l_line += "long " + colName + "=0;";
+			}
+			sb.appendLine(l_line);
+			
+			sb.append("\n");
+		}
+		sb.append("\n");
+		
+		// get、set
+		for (int i = 1; i <= l_rset.getMetaData().getColumnCount(); i++) {
+			String colName = l_rset.getMetaData().getColumnName(i).toLowerCase();
+			
+			String l_name = StringUnit.getCamelName(colName, true);
+			String l_name1 = StringUnit.getCamelName(colName, false);
+			
+			String l_type = TypeHelper.getTypeFromDb2Java(l_rset.getMetaData().getColumnClassName(i));
+
+			String remark = remarks.get(colName);
+			if (null != remark && !"".equals(remark)) {
+				sb.appendLine("	/**");
+				sb.appendLine("	* 获取 " + remark);
+				sb.appendLine("	*/");
+			}
+			sb.appendLine("	public " + l_type + " get" + l_name + "(){");
+			sb.appendLine("		return " + l_name1 + ";");
+			sb.appendLine("	}");
+			if (null != remark && !"".equals(remark)) {
+				sb.appendLine("	/**");
+				sb.appendLine("	* 设置 " + remark);
+				sb.appendLine("	*/");
+			}
+			sb.appendLine("	public void set" + l_name + "(" + l_type + " " + l_name1 + "){");
+			sb.appendLine("		this." + l_name1 + " = " + l_name1 + ";");
+			sb.appendLine("	}");
+			
+			sb.append("\n");
+		}
+		sb.append("\n");
+		
+		// toString()
+		sb.appendLine("	@Override");
+		sb.appendLine("	public String toString() {");
+		sb.append("		return \"" + ClassName + " [\"");
+		for (int i = 1; i <= l_rset.getMetaData().getColumnCount(); i++) {
+			String colName = l_rset.getMetaData().getColumnName(i).toLowerCase();
+			String l_name1 = StringUnit.getCamelName(colName, false);
+			
+//			return "FfpMember ["
+//				+ "memberId=" + memberId
+//				+ ", memberGradeNo=" + memberGradeNo
+//				+ "]";
+			if(i == 1){
+				sb.append(" + \"" + l_name1 + "=\" + " + l_name1);
+			}else{
+				sb.append(" + \", " + l_name1 + "=\" + " + l_name1);
+			}
+		}
+		sb.appendLine(" + \"]\";");
+		sb.appendLine("	}");
+	    
+		sb.append("}");
+		
+		// 输出内容
+		// println(sb.toString());
+		// return sb.toString();
+		writeFile(fileName, tableName, sb.toString());
+	}
+	
+	public static void writeFile(String fileName, String tableName, String writeStr){
+		try{
+			PrintWriter writer = new PrintWriter(fileName, "UTF-8");
+			writer.println(writeStr);
+			writer.flush();
+			writer.close();
+			
+			println("ok	" + fileName);
+		} catch (Exception ex) {
+			println("error	" + tableName + "	" + fileName);
+	
+			PrintWriter writer;
+			try {
+				writer = new PrintWriter(fileName, "UTF-8");
+				writer.println(tableName);
+				writer.flush();
+				writer.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			// ex.printStackTrace();
+		}
+	}
+	
+	public static void print(Object o){
+		System.out.print(String.valueOf(o));
+	}
+	public static void println(Object o){
+		System.out.println((String.valueOf(o)));
+	}
+}

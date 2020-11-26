@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springboot.mybatis.LogMapper">
+
+    <select id="getByName" resultType="com.springboot.mybatis.LogInfo">
+        select name, ip from t_log where name like "%"#{name}"%" limit 10
+    </select>
+
+</mapper>
