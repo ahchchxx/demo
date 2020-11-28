@@ -1,6 +1,6 @@
 package com.example.springboot;
 
-import org.eclipse.jetty.server.Server;
+// import org.eclipse.jetty.server.Server;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -10,7 +10,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 //@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 @SpringBootApplication
 //@ServletComponentScan
-@ConditionalOnClass({Server.class})
+// @ConditionalOnClass({Server.class})
 public class DemoApplication {
 
 	public static void main(String[] args) {
