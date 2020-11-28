@@ -13,6 +13,7 @@
 		<module>javaTest</module>
         <module>generator</module>
 		<module>DesignPattern</module>
+		<module>spring-test</module>
 	</modules>
 
     <parent>
