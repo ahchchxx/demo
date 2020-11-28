@@ -5,12 +5,14 @@ public class AbstractMethodMonitorEventListener implements MethodMonitorEventLis
 
     @Override
     public void onMethodBegin(MethodMonitorEvent event) {
+        System.out.println("Method Begin...");
         // 记录方法开始执行时的时间
         event.timestamp = System.currentTimeMillis();
     }
 
     @Override
     public void onMethodEnd(MethodMonitorEvent event) {
+        System.out.println("Method End...");
         // 计算方法耗时
         long duration = System.currentTimeMillis() - event.timestamp;
         System.out.println("耗时：" + duration);
