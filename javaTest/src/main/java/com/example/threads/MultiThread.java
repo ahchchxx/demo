@@ -21,8 +21,10 @@ public abstract class MultiThread<H, T> {
     public MultiThread(List<H> list) {
         if (list != null && list.size() > 0) {
             this.listData = list;
-            exec = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()); //创建线程池，线程池共有nThread个线程
-            endLock = new CountDownLatch(list.size());  //设置结束门计数器，当一个线程结束时调用countDown
+            //创建线程池，线程池共有nThread个线程
+            exec = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+            //设置结束门计数器，当一个线程结束时调用 countDown
+            endLock = new CountDownLatch(list.size());
         } else {
             listData = null;
             exec = null;
@@ -40,7 +42,7 @@ public abstract class MultiThread<H, T> {
         if (listData != null && listData.size() > 0) {
             int nThread = listData.size(); //线程数量
             for (int i = 0; i < nThread; i++) {
-                H data = listData.get(i);
+                H data = listData.get(i); // ParamVo
                 Future<T> future = exec.submit(new Task(i, data) {
                     @Override
                     public T execute(int currentThread, H data) {

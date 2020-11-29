@@ -14,6 +14,7 @@
         <module>generator</module>
 		<module>DesignPattern</module>
 		<module>spring-test</module>
+		<module>BookAttachment</module>
 	</modules>
 
     <parent>

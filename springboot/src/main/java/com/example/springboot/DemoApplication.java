@@ -11,6 +11,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 @SpringBootApplication
 //@ServletComponentScan
 // @ConditionalOnClass({Server.class})
+// @ConditionalOnClass(name = "org.eclipse.jetty.server.Server")
 public class DemoApplication {
 
 	public static void main(String[] args) {
@@ -18,6 +19,7 @@ public class DemoApplication {
 		// appContext.getBean("xxx")
 		// appContext.containsBean("xxx")
 		// appContext.getBeanFactory().getBeanNamesForType(xxxClass.class)
+		// appContext.getBeanFactory().getBean("xxx", xxxClass.class)
 	}
 
 }
