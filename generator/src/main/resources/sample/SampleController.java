@@ -36,7 +36,6 @@ public class ##ClassNameSuffix# extends BaseController<##ClassEntityName#, Strin
 
 	// get list by query and page
 	@RequestMapping(value = "/getByCondition", method = RequestMethod.GET)
-	@ResponseBody
 	@ApiOperation(value = "分页获取")
 	public Result<Page<##ClassEntityName#>> getByConditionPage(PageVo page, ##ClassEntityName# bean) {
 		QueryWrapper<##ClassEntityName#> qw = new QueryWrapper<>();

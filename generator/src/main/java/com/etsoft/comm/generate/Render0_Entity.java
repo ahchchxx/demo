@@ -14,7 +14,10 @@ public class Render0_Entity {
 		// ★ 开始拼字符串
 		// 是否导入日期包
 		if (l_date) {
-			fileStr = fileStr.replaceFirst("##importDate#", "import java.util.Date;");
+			fileStr = fileStr.replaceFirst("##importDate#", "import java.util.Date;\r\n" +
+					"import org.springframework.format.annotation.DateTimeFormat;\r\n" +
+					"import com.fasterxml.jackson.annotation.JsonFormat;"
+			);
 		} else {
 			fileStr = fileStr.replaceFirst("##importDate#\r\n", "");
 		}
@@ -35,6 +38,10 @@ public class Render0_Entity {
 			String ColName = StringUnit.getCamelName(col_name, true);
 
 			sb.appendLine("\t@ApiModelProperty(value = \""+ ColName +"\")");
+			if (TypeHelper.isDateType(l_rset.getMetaData(), i)) { // cur field is date type
+				sb.appendLine("\t@JsonFormat(timezone = \"GMT+8\", pattern = \"yyyy-MM-dd\")"); //  HH:mm:ss
+				sb.appendLine("\t@DateTimeFormat(pattern = \"yyyy-MM-dd\")");
+			}
 			sb.append("\tprivate ");
 			sb.append(TypeHelper.getTypeFromDb2Java(l_rset.getMetaData(), i));
 			sb.append(" " + colName + ";\n");

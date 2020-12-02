@@ -1,6 +1,10 @@
 package com.etsoft.comm.tool;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 
 public class TypeHelper {
 	
@@ -28,11 +32,11 @@ public class TypeHelper {
 		return type;
 	}
 
-	// convert type form db 2 java
+	// convert type form db 2 java, (mysql)
 	public static String getTypeFromDb2Java(ResultSetMetaData metaData, int i) throws Exception {
-		//ConsoleHelper.println(metaData.getColumnClassName(i));
+		// ConsoleHelper.println(metaData.getColumnName(i) + "," + metaData.getColumnClassName(i));
 		String ret = "";
-		if (metaData.getColumnClassName(i).equals("java.sql.Timestamp")) {
+		if (isDateType(metaData, i)) {
 			ret = "Date";
 		} else if (metaData.getColumnClassName(i).equals("java.lang.String")) {
 			ret = "String";
@@ -45,6 +49,17 @@ public class TypeHelper {
 			ret = "Long";
 		}
 		return ret;
+	}
+
+	public static boolean isDateType(ResultSetMetaData metaData, int i) throws SQLException {
+		// they are not separate now.
+		// @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+		// @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+		if (metaData.getColumnClassName(i).equals("java.sql.Timestamp")
+				|| metaData.getColumnClassName(i).equals("java.sql.Date")) {
+			return true;
+		}
+		return false;
 	}
 
 	// 这个针对 Access 数据库使用

@@ -60,7 +60,7 @@ public class GContext {
             if (defaultList.indexOf(col_name) >= 0) {
                 continue; // 这些封装在父类里了
             }
-            if (l_rset.getMetaData().getColumnClassName(i).equals("java.sql.Timestamp")) {
+            if (TypeHelper.isDateType(l_rset.getMetaData(), i)) {
                 l_date = true; break;
             }
         }
