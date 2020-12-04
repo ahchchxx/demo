@@ -52,11 +52,11 @@ public class Render3_Controller {
                 sb.appendLine("\t\t}");
             } else if ("String".equals(javaType)) {
                 sb.appendLine("\t\tif (!StringUtils.isEmpty(bean.get" + ColName + "())) {");
-                sb.appendLine("\t\t\tqw.like(\"" + col_name + "\", bean.get" + ColName + "());");
+                sb.appendLine("\t\t\tqw.like(\"`" + col_name + "`\", bean.get" + ColName + "());");
                 sb.appendLine("\t\t}");
             } else {
                 sb.appendLine("\t\tif (bean.get" + ColName + "() != null) {");
-                sb.appendLine("\t\t\tqw.eq(\"" + col_name + "\", bean.get" + ColName + "());");
+                sb.appendLine("\t\t\tqw.eq(\"`" + col_name + "`\", bean.get" + ColName + "());");
                 sb.appendLine("\t\t}");
             }
         }

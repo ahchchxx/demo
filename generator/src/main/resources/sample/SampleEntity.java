@@ -1,6 +1,7 @@
 package cn.exrick.xboot.modules.web.entity;
 
 import cn.exrick.xboot.modules.base.mpbase.BaseEntity;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

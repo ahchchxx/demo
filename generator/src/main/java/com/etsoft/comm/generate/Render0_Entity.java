@@ -38,6 +38,7 @@ public class Render0_Entity {
 			String ColName = StringUnit.getCamelName(col_name, true);
 
 			sb.appendLine("\t@ApiModelProperty(value = \""+ ColName +"\")");
+			sb.appendLine("\t@TableField(\"`"+ col_name +"`\")");
 			if (TypeHelper.isDateType(l_rset.getMetaData(), i)) { // cur field is date type
 				sb.appendLine("\t@JsonFormat(timezone = \"GMT+8\", pattern = \"yyyy-MM-dd\")"); //  HH:mm:ss
 				sb.appendLine("\t@DateTimeFormat(pattern = \"yyyy-MM-dd\")");

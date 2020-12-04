@@ -40,7 +40,8 @@ public class TypeHelper {
 			ret = "Date";
 		} else if (metaData.getColumnClassName(i).equals("java.lang.String")) {
 			ret = "String";
-		} else if (metaData.getColumnClassName(i).equals("java.lang.Short")) {
+		} else if (metaData.getColumnClassName(i).equals("java.lang.Short")||
+			metaData.getColumnClassName(i).equals("java.lang.Integer")) {
 			ret = "Integer";// "int";
 		} else if (metaData.getScale(i) > 0) {
 			ret = "Double";// "double";

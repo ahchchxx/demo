@@ -34,9 +34,8 @@ public class ##ClassNameSuffix# extends BaseController<##ClassEntityName#, Strin
 		return service;
 	}
 
-	// get list by query and page
 	@RequestMapping(value = "/getByCondition", method = RequestMethod.GET)
-	@ApiOperation(value = "分页获取")
+	@ApiOperation(value = "Get list by query and page")
 	public Result<Page<##ClassEntityName#>> getByConditionPage(PageVo page, ##ClassEntityName# bean) {
 		QueryWrapper<##ClassEntityName#> qw = new QueryWrapper<>();
 		##PaginationQueryList#
