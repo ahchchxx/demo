@@ -4,16 +4,16 @@ package com.gupaoedu.mybatis.my;
 
 public class Test {
     private Integer id;
-
     private Integer nums;
+    private String name;
 
-    @Override
-    public String toString() {
-        return "Test{" +
-                "id=" + id +
-                ", nums=" + nums +
-                ", name='" + name + '\'' +
-                '}';
+    public Test(Integer id, Integer nums, String name) {
+        this.id = id;
+        this.nums = nums;
+        this.name = name;
+    }
+    public Test() {
+
     }
 
     public Integer getId() {
@@ -40,15 +40,12 @@ public class Test {
         this.name = name;
     }
 
-    private String name;
-
-    public Test(Integer id, Integer nums, String name) {
-        this.id = id;
-        this.nums = nums;
-        this.name = name;
-    }
-
-    public Test() {
-
+    @Override
+    public String toString() {
+        return "Test{" +
+                "id=" + id +
+                ", nums=" + nums +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

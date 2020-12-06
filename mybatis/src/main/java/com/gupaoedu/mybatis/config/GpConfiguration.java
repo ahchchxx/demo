@@ -45,15 +45,7 @@ public class GpConfiguration {
     }
 
     public static void main(String[] args) throws Exception {
-        new GpConfiguration().scanPath("com/gupaoedu/mybatis/gp/config/mappers").build();
-    }
-
-    @Override
-    public String toString() {
-        return "GpConfiguration{" +
-                "scanPath='" + scanPath + '\'' +
-                ", mapperRegistory=" + mapperRegistory +
-                '}';
+        new GpConfiguration().scanPath("com/gupaoedu/mybatis/config/mappers").build();
     }
 
     public String getScanPath() {
@@ -70,5 +62,13 @@ public class GpConfiguration {
 
     public void setMapperRegistory(MapperRegistory mapperRegistory) {
         this.mapperRegistory = mapperRegistory;
+    }
+
+    @Override
+    public String toString() {
+        return "GpConfiguration{" +
+                "scanPath='" + scanPath + '\'' +
+                ", mapperRegistory=" + mapperRegistory +
+                '}';
     }
 }

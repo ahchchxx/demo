@@ -15,7 +15,8 @@
 		<module>DesignPattern</module>
 		<module>spring-test</module>
 		<module>BookAttachment</module>
-	</modules>
+        <module>MQ</module>
+    </modules>
 
     <parent>
 		<groupId>org.springframework.boot</groupId>

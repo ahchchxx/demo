@@ -26,7 +26,7 @@ public class MyTestPlugin implements MyInterceptor {
 //        System.out.println(String.format("plugin output sql = %s , param=%s", boundSql.getSql(),boundSql.getParameterObject()));
         System.out.println(invocation);
         System.out.println("==============");
-        return invocation.proceed();
+        return invocation.proceed(); // 最终执行所拦截的方法
     }
 
     @Override

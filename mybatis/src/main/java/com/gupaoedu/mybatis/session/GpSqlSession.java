@@ -28,11 +28,11 @@ public class GpSqlSession {
 
     public <T> T getMapper(Class<T> clazz) {
         return (T) Proxy.newProxyInstance(clazz.getClassLoader(),
-                new Class[]{clazz},new MapperProxy(this,clazz));
+                new Class[]{clazz}, new MapperProxy(this, clazz));
     }
 
     public <T> T selectOne(MapperRegistory.MapperData mapperData, Object parameter) throws Exception {
-        executor  = (Executor)configuration.newExecutor(executor);
+        executor = (Executor) configuration.newExecutor(executor);
 
         return executor.query(mapperData, parameter);
     }
