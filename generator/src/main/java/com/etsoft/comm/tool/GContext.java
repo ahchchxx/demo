@@ -15,8 +15,10 @@ public class GContext {
     private final String entityFoldSuffixStr = "entity";
     private final String entityFileSuffixStr = "Info";
 
-    private final String daoFoldSuffixStr = "mapper";//""dao";
+    private final String daoFoldSuffixStr = "mapper";//"dao";
     private final String daoFileSuffixStr = "Dao";
+    private final String xmlFoldSuffixStr = "mapperXml";//"mapper xml";
+    private final String xmlFileSuffixStr = "Mapper";
 
     private final String serviceFoldSuffixStr = "service";
     private final String serviceFileSuffixStr = "Service";
@@ -91,6 +93,9 @@ public class GContext {
     public String getDaoClassNameSuffix() {
         return getClassName(true) + daoFileSuffixStr;
     }
+    public String getDaoXmlClassNameSuffix() {
+        return getClassName(true) + xmlFileSuffixStr;
+    }
     public String getServiceClassNameSuffix() {
         return getClassName(true) + serviceFileSuffixStr;
     }
@@ -111,6 +116,11 @@ public class GContext {
         String fullPath = filePath + daoFoldSuffixStr + "\\";
         FileHelper.checkDirectoryExsit(fullPath);
         return fullPath + getDaoClassNameSuffix() + ".java";
+    }
+    public String getDaoXmlFileFullPath(){
+        String fullPath = filePath + xmlFoldSuffixStr + "\\";
+        FileHelper.checkDirectoryExsit(fullPath);
+        return fullPath + getDaoXmlClassNameSuffix() + ".xml";
     }
     public String getServiceFileFullPath(){
         String fullPath = filePath + serviceFoldSuffixStr + "\\";
@@ -133,6 +143,9 @@ public class GContext {
     }
     public String getDaoSampleFileStr(){
         return FileHelper.readToString(sampleFilePath + "/sample/SampleDao.java");
+    }
+    public String getDaoXmlSampleFileStr(){
+        return FileHelper.readToString(sampleFilePath + "/sample/SampleDaoXml.xml");
     }
     public String getServiceSampleFileStr(){
         return FileHelper.readToString(sampleFilePath + "/sample/SampleService.java");
