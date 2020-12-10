@@ -1,13 +1,15 @@
 package com.example;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
-//@Component
+// @Component
 @EnableConfigurationProperties(RedisConfig.class)
 public class JedisPoolUtil {
     @Autowired
@@ -16,7 +18,7 @@ public class JedisPoolUtil {
 //    JedisPool pool = null;
 
     @Bean
-//    @ConditionalOnMissingBean
+    // @ConditionalOnMissingBean
     public JedisPool jedisPoolUtil() {
         JedisPoolConfig config = new JedisPoolConfig();
         config.setMaxTotal(redisConfig.getMaxNum());

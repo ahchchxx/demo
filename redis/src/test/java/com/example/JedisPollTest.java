@@ -1,6 +1,5 @@
-package com.example.test;
+package com.example;
 
-import com.example.App;
 import com.example.JedisPoolUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +19,7 @@ public class JedisPollTest {
     @Test
     public void test1() {
         Jedis jedis = jedisPoolUtil.getJedis();
-//        Jedis jedis = JedisPoolUtil.getJedis();
+        // Jedis jedis = JedisPoolUtil.getJedis();
         String set = jedis.set("abc", "abc123");
         System.out.println(set);
 

@@ -1,4 +1,4 @@
-package com.example.test;
+package com.example;
 
 import com.example.redislock.CacheLockInterceptor;
 import com.example.redislock.secondkill.SecKillImpl;
@@ -15,12 +15,12 @@ public class SecKillTest {
 
     @Test
     public void testSecKill() {
-//        int threadCount = 1000;
-//        int splitPoint = 500;
+        // int threadCount = 1000;
+        // int splitPoint = 500;
         int threadCount = 100;
         int splitPoint = 50;
-        CountDownLatch endCount = new CountDownLatch(threadCount);
         CountDownLatch beginCount = new CountDownLatch(1);
+        CountDownLatch endCount = new CountDownLatch(threadCount);
         SecKillImpl testClass = new SecKillImpl();
 
         Thread[] threads = new Thread[threadCount];
