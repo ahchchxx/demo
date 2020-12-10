@@ -1,4 +1,4 @@
-package com.example.test;
+package com.example.annotation0reflection;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -19,10 +19,10 @@ public class AnnotationTest {
         System.out.println("hello");
     }
 
-    public static void main(String[] args) throws NoSuchMethodException {
-//        myFun();
+    public static void main(String[] args) throws Exception {
+        myFun();
 
-        Method m = AnnotationTest.class.getMethod("myFun", String[].class);
+        Method m = AnnotationTest.class.getMethod("myFun", null); // String[].class
         myAnno anno = m.getAnnotation(myAnno.class);
         System.out.println(anno.value());
 
