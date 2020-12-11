@@ -4,6 +4,9 @@ import java.io.IOException;
 
 public class test {
 
+    /**
+     * 交替打印 A1 B2 C3 ...
+     */
     public static void main(String[] args) throws IOException {
         Object lock = new Object();
         final Integer[] i = {0};
