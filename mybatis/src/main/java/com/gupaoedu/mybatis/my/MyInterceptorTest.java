@@ -15,14 +15,15 @@ public class MyInterceptorTest implements MyInterceptor {
         // BoundSql boundSql = mappedStatement.getBoundSql(invocation.getArgs()[1]);
         // System.out.println(String.format("plugin output sql = %s , param=%s", boundSql.getSql(), boundSql.getParameterObject()));
         System.out.println(invocation);
-        System.out.println("MyTestPlugin==============intercept");
+        System.out.println("MyTestPlugin==============intercept, specific functions changed in Plugin by AOP");
         return invocation.proceed(); // 最终执行所拦截的方法
     }
 
     @Override
     public Object plugin(Object target) throws Exception {
-        System.out.println("MyTestPlugin------------plugin");
+        System.out.println("MyTestPlugin------------plugin");// 执行 2次？
         // 通过代理模式，将所有用 PluginAnnotation 和 MySignature 注解的类都用 MyPlugin 类代理
+        // 目的是实现 插件
         return MyPlugin.wrap(target, this);
     }
 }
