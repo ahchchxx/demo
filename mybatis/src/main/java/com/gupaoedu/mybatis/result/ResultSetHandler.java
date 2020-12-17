@@ -23,7 +23,7 @@ public class ResultSetHandler {
         this.configuration = configuration;
     }
 
-    public <E> E handle(ResultSet rs, Class type) throws SQLException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    public <E> E handle(ResultSet rs, Class type) throws Exception {
         Object resultObj = new DefaultObjectFactory().create(type);
         if (rs.next()) {
             int i = 0;
@@ -34,7 +34,7 @@ public class ResultSetHandler {
         return (E) resultObj;
     }
 
-    private void setValue(Object resultObj, Field field, ResultSet rs, int i) throws NoSuchMethodException, SQLException, InvocationTargetException, IllegalAccessException {
+    private void setValue(Object resultObj, Field field, ResultSet rs, int i) throws Exception {
         Method setMethod = resultObj.getClass().getMethod("set" + upperCapital(field.getName()), field.getType());
         setMethod.invoke(resultObj, getResult(field,rs));
     }

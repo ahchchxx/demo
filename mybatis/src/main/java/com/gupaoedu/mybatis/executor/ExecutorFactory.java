@@ -12,7 +12,6 @@ public class ExecutorFactory {
     private static final String SIMPLE = "SIMPLE";
     private static final String CACHING = "CACHING";
 
-
     public static Executor DEFAULT(GpConfiguration configuration) {
         return get(SIMPLE, configuration);
     }
@@ -28,6 +27,6 @@ public class ExecutorFactory {
     }
 
     public enum ExecutorType {
-        SIMPLE,CACHING
+        SIMPLE, CACHING
     }
 }

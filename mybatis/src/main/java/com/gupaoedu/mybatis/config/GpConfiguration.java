@@ -13,10 +13,14 @@ import java.io.IOException;
  */
 public class GpConfiguration {
 
+    public static void main(String[] args) throws Exception {
+        new GpConfiguration().scanPath("com/gupaoedu/mybatis/config/mappers").build();
+    }
+
     protected final MyInterceptorChain interceptorChain = new MyInterceptorChain();
     private String inteceptor = null;
     {
-        inteceptor = "com.gupaoedu.mybatis.MyTestPlugin";
+        inteceptor = "com.gupaoedu.mybatis.test.MyTestPlugin";
     }
     private String scanPath;
     private MapperRegistory mapperRegistory = new MapperRegistory();
@@ -44,14 +48,9 @@ public class GpConfiguration {
         this.interceptorChain.addInterceptor(interceptor);
     }
 
-    public static void main(String[] args) throws Exception {
-        new GpConfiguration().scanPath("com/gupaoedu/mybatis/config/mappers").build();
-    }
-
     public String getScanPath() {
         return scanPath;
     }
-
     public void setScanPath(String scanPath) {
         this.scanPath = scanPath;
     }
@@ -59,7 +58,6 @@ public class GpConfiguration {
     public MapperRegistory getMapperRegistory() {
         return mapperRegistory;
     }
-
     public void setMapperRegistory(MapperRegistory mapperRegistory) {
         this.mapperRegistory = mapperRegistory;
     }

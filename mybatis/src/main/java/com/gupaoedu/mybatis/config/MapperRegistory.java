@@ -17,10 +17,10 @@ public class MapperRegistory {
     //2. Java Bean的属性名字要和数据库表的名字一致
     public MapperRegistory() {
         methodSqlMapping.put("com.gupaoedu.mybatis.my.TestMapper.selectByPrimaryKey",
-                new MapperData("select * from test where id = %d",Test.class));
+                new MapperData("select * from test where id = %d", Test.class));
     }
 
-    public class MapperData<T>{
+    public class MapperData<T> {
         private String sql;
         private Class<T> type;
 
@@ -32,7 +32,6 @@ public class MapperRegistory {
         public String getSql() {
             return sql;
         }
-
         public void setSql(String sql) {
             this.sql = sql;
         }
@@ -40,7 +39,6 @@ public class MapperRegistory {
         public Class<T> getType() {
             return type;
         }
-
         public void setType(Class<T> type) {
             this.type = type;
         }

@@ -10,7 +10,7 @@ import java.sql.*;
  * Created by James
  * From 咕泡学院出品
  * 老师咨询 QQ 2904270631
- *
+ * <p>
  * 数据库操作和结果处理分发
  */
 public class StatementHandler {
@@ -33,7 +33,7 @@ public class StatementHandler {
             pstmt.execute();
             //ResultSetHandler
             this.configuration.newExecutor(resultSetHandler);
-            return (E)resultSetHandler.handle(pstmt.getResultSet(),mapperData.getType());
+            return (E) resultSetHandler.handle(pstmt.getResultSet(), mapperData.getType());
         } catch (SQLException e) {
             e.printStackTrace();
         }

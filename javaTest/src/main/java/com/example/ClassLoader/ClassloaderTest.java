@@ -13,12 +13,13 @@ public class ClassloaderTest {
 
 
         // 1, Class.forName
-        Class.forName("com.example.ClassLoader.ClassForName");
-        System.out.println("↑ ↑ ↑ ↑ ↑   Class.forName");
+        Class<?> aClass1 = Class.forName("com.example.ClassLoader.ClassForName");
+        System.out.println(aClass1.getName());
+        System.out.println("↑ ↑ ↑ ↑ ↑   Class.forName\n");
 
         // 2, ClassLoader.  it won't initialize class...
-        Class<?> aClass = ClassLoader.getSystemClassLoader().loadClass("com.example.ClassLoader.ClassForName");
-        System.out.println(aClass.getName());
+        Class<?> aClass2 = ClassLoader.getSystemClassLoader().loadClass("com.example.ClassLoader.ClassForName");
+        System.out.println(aClass2.getName());
     }
 
 }

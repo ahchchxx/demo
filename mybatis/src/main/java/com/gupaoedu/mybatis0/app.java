@@ -6,7 +6,7 @@ import com.gupaoedu.mybatis.my.Test;
  * From 咕泡学院出品
  * 老师咨询 QQ 2904270631
  */
-public class Entry {
+public class app {
     public static void main(String[] args) {
         GPSqlSession sqlSession = new GPSqlSession(new GPConfiguration(), new GPSimpleExecutor());
         TestMapper mapper = sqlSession.getMapper(TestMapper.class);
