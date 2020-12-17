@@ -1,7 +1,5 @@
 package com.gupaoedu.mybatis.plugin;
 
-//import org.apache.ibatis.plugin.Interceptor;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -16,7 +14,7 @@ public class MyInterceptorChain {
 
     private final List<MyInterceptor> interceptors = new ArrayList<>();
 
-    public Object pluginAll(Object target) {
+    public Object pluginAll(Object target) throws Exception {
         for (MyInterceptor interceptor : interceptors) {
             target = interceptor.plugin(target);
         }

@@ -1,13 +1,10 @@
 package com.gupaoedu.mybatis.result;
 
 import com.gupaoedu.mybatis.config.GpConfiguration;
-import com.gupaoedu.mybatis.config.MapperRegistory;
 import org.apache.ibatis.reflection.factory.DefaultObjectFactory;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 

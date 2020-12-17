@@ -20,12 +20,12 @@ public class GpConfiguration {
     protected final MyInterceptorChain interceptorChain = new MyInterceptorChain();
     private String inteceptor = null;
     {
-        inteceptor = "com.gupaoedu.mybatis.test.MyTestPlugin";
+        inteceptor = "com.gupaoedu.mybatis.my.MyInterceptorTest";
     }
     private String scanPath;
     private MapperRegistory mapperRegistory = new MapperRegistory();
 
-    public Object newExecutor(Object object) {
+    public Object newExecutor(Object object) throws Exception {
         return (Object) interceptorChain.pluginAll(object);
     }
 
@@ -36,9 +36,10 @@ public class GpConfiguration {
 
     public void build() throws Exception {
         if (null == scanPath || scanPath.length() < 1) {
-            throw new RuntimeException("scan path is required .");
+            throw new RuntimeException("scan path is required.");
         }
         if (inteceptor != null) {
+            // 加载自定义的插件
             MyInterceptor myInterceptor = (MyInterceptor)Class.forName(inteceptor).newInstance();
             addInterceptor(myInterceptor);
         }

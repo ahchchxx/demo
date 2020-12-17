@@ -44,9 +44,9 @@ public class StatementHandler {
 
     public Connection getConnection() throws SQLException {
         String driver = "com.mysql.cj.jdbc.Driver";
-        String url = "jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf-8&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+        String url = "jdbc:mysql://192.168.118.131:3306/xboot?useUnicode=true&characterEncoding=utf-8&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
         String username = "root";
-        String password = "root";
+        String password = "123456";
         Connection conn = null;
         try {
             Class.forName(driver); //classLoader,加载对应驱动

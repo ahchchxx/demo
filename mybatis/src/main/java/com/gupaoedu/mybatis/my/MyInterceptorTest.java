@@ -1,35 +1,28 @@
 package com.gupaoedu.mybatis.my;
 
 import com.gupaoedu.mybatis.executor.Executor;
-import com.gupaoedu.mybatis.plugin.MyInterceptor;
-import com.gupaoedu.mybatis.plugin.MyInvocation;
-import com.gupaoedu.mybatis.plugin.MyPlugin;
-import com.gupaoedu.mybatis.plugin.PluginAnnotation;
-import org.apache.ibatis.plugin.Signature;
+import com.gupaoedu.mybatis.plugin.*;
 import com.gupaoedu.mybatis.config.MapperRegistory.MapperData;
 
 /**
- * @Author: xcao
- * @Description:
- * @Date:Create in 17:04 2018/4/10
- * @Modified By:
+ * 这个就是测试的插件类
  */
-@PluginAnnotation({@Signature(type = Executor.class, method = "query",
-        args = {MapperData.class, Object.class})})
-public class MyTestPlugin implements MyInterceptor {
+@PluginAnnotation({@MySignature(type = Executor.class, method = "query", args = {MapperData.class, Object.class})})
+public class MyInterceptorTest implements MyInterceptor {
     @Override
     public Object intercept(MyInvocation invocation) throws Throwable {
         // MappedStatement mappedStatement = (MappedStatement) invocation.getArgs()[0];
         // BoundSql boundSql = mappedStatement.getBoundSql(invocation.getArgs()[1]);
         // System.out.println(String.format("plugin output sql = %s , param=%s", boundSql.getSql(), boundSql.getParameterObject()));
         System.out.println(invocation);
-        System.out.println("==============");
+        System.out.println("MyTestPlugin==============intercept");
         return invocation.proceed(); // 最终执行所拦截的方法
     }
 
     @Override
-    public Object plugin(Object target) {
-        System.out.println("------------");
+    public Object plugin(Object target) throws Exception {
+        System.out.println("MyTestPlugin------------plugin");
+        // 通过代理模式，将所有用 PluginAnnotation 和 MySignature 注解的类都用 MyPlugin 类代理
         return MyPlugin.wrap(target, this);
     }
 }

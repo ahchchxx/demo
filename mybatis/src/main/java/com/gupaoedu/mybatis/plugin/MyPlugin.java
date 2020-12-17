@@ -8,9 +8,6 @@ import java.util.Set;
 import java.util.HashSet;
 import java.lang.reflect.Proxy;
 
-import org.apache.ibatis.plugin.PluginException;
-import org.apache.ibatis.plugin.Signature;
-
 /**
  * @Author: xcao
  * @Description:
@@ -19,9 +16,7 @@ import org.apache.ibatis.plugin.Signature;
  */
 public class MyPlugin implements InvocationHandler {
     private MyInterceptor interceptor;
-
     private Object object;
-
     private Map<Class<?>, Set<Method>> signatureMap;
 
     public MyPlugin(Object object, MyInterceptor interceptor, Map<Class<?>, Set<Method>> signatureMap) {
@@ -30,31 +25,38 @@ public class MyPlugin implements InvocationHandler {
         this.signatureMap = signatureMap;
     }
 
-    public static Object wrap(Object target, MyInterceptor interceptor) {
-        Map<Class<?>, Set<Method>> signatureMap = getSignatureMap(interceptor);
-        Class<?> type = target.getClass();
-        Class<?>[] interfaces = getAllInterfaces(type, signatureMap);
-        return interfaces.length > 0 ? Proxy.newProxyInstance(type.getClassLoader(), interfaces, new MyPlugin(target, interceptor, signatureMap)) : target;
-    }
-
+    /**
+     * 代理方法，调用被代理方法时，会直接执行这个方法，
+     */
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         Set<Method> methods = this.signatureMap.get(method.getDeclaringClass());
-        return methods != null && methods.contains(method) ? this.interceptor.intercept(new MyInvocation(this.object, method, args)) : method.invoke(this.object, args);
+        return methods != null && methods.contains(method)
+                ? this.interceptor.intercept(new MyInvocation(this.object, method, args))
+                : method.invoke(this.object, args);
     }
 
-    private static Map<Class<?>, Set<Method>> getSignatureMap(MyInterceptor interceptor) {
+
+    public static Object wrap(Object target, MyInterceptor interceptor) throws Exception {
+        Map<Class<?>, Set<Method>> signatureMap = getSignatureMap(interceptor);
+        Class<?> type = target.getClass();
+        Class<?>[] interfaces = getAllInterfaces(type, signatureMap);
+        return interfaces.length > 0
+                ? Proxy.newProxyInstance(type.getClassLoader(), interfaces, new MyPlugin(target, interceptor, signatureMap))
+                : target;
+    }
+
+    private static Map<Class<?>, Set<Method>> getSignatureMap(MyInterceptor interceptor) throws Exception {
         PluginAnnotation interceptsAnnotation = (PluginAnnotation) interceptor.getClass().getAnnotation(PluginAnnotation.class);
         if (interceptsAnnotation == null) {
-            throw new PluginException("No @Intercepts annotation was found in interceptor " + interceptor.getClass().getName());
+            throw new Exception("No @Intercepts annotation was found in interceptor " + interceptor.getClass().getName());
         } else {
-            Signature[] sigs = interceptsAnnotation.value();
+            MySignature[] sigs = interceptsAnnotation.value();
             Map<Class<?>, Set<Method>> signatureMap = new HashMap();
-            Signature[] var4 = sigs;
-            int var5 = sigs.length;
+            int sigLen = sigs.length;
 
-            for (int var6 = 0; var6 < var5; ++var6) {
-                Signature sig = var4[var6];
+            for (int i = 0; i < sigLen; ++i) {
+                MySignature sig = sigs[i];
                 Set<Method> methods = (Set) signatureMap.get(sig.type());
                 if (methods == null) {
                     methods = new HashSet();
@@ -64,8 +66,8 @@ public class MyPlugin implements InvocationHandler {
                 try {
                     Method method = sig.type().getMethod(sig.method(), sig.args());
                     ((Set) methods).add(method);
-                } catch (NoSuchMethodException var10) {
-                    throw new PluginException("Could not find method on " + sig.type() + " named " + sig.method() + ". Cause: " + var10, var10);
+                } catch (NoSuchMethodException e) {
+                    throw new Exception("Could not find method on " + sig.type() + " named " + sig.method() + ". Cause: " + e);
                 }
             }
 
@@ -76,11 +78,11 @@ public class MyPlugin implements InvocationHandler {
     private static Class<?>[] getAllInterfaces(Class<?> type, Map<Class<?>, Set<Method>> signatureMap) {
         HashSet interfaces;
         for (interfaces = new HashSet(); type != null; type = type.getSuperclass()) {
-            Class[] var3 = type.getInterfaces();
-            int var4 = var3.length;
+            Class[] typeInterfaces = type.getInterfaces();
+            int length = typeInterfaces.length;
 
-            for (int var5 = 0; var5 < var4; ++var5) {
-                Class<?> c = var3[var5];
+            for (int i = 0; i < length; ++i) {
+                Class<?> c = typeInterfaces[i];
                 if (signatureMap.containsKey(c)) {
                     interfaces.add(c);
                 }

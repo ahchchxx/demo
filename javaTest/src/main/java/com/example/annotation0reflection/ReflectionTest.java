@@ -18,7 +18,11 @@ public class ReflectionTest {
 
         // 2
         getMethods(cls);
+
+        // 3 get class's interface
+        getInterfaces(cls);
     }
+
 
     private static void getField(Class<ReflectionTest> cls) throws Exception {
         // get fields, read & write data
@@ -47,6 +51,7 @@ public class ReflectionTest {
 
         // get method by string of method's name
         Method method1 = cls.getDeclaredMethod("aMethodName", null);
+        Method method2 = cls.getMethod("aMethodName", null);
 
         // get annotation for method
         Annotation[] annotations = method.getDeclaredAnnotations();
@@ -54,6 +59,10 @@ public class ReflectionTest {
         Deprecated annotation = method.getAnnotation(Deprecated.class);
         String since = annotation.since();
         // annotation.xxx
+    }
+
+    private static void getInterfaces(Class<ReflectionTest> cls) {
+        Class<?>[] interfaces = cls.getInterfaces();
     }
 
 }

@@ -1,7 +1,5 @@
 package com.gupaoedu.mybatis.plugin;
 
-import org.apache.ibatis.plugin.Signature;
-
 import java.lang.annotation.*;
 
 /**
@@ -15,5 +13,5 @@ import java.lang.annotation.*;
 @Target({ElementType.TYPE})
 public @interface PluginAnnotation {
 
-    Signature[] value();
+    MySignature[] value();
 }

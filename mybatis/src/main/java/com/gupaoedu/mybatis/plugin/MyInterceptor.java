@@ -10,7 +10,7 @@ public interface MyInterceptor {
 
     Object intercept(MyInvocation invocation) throws Throwable;
 
-    Object plugin(Object target);
+    Object plugin(Object target) throws Exception;
 
 //    void setProperties(Properties properties);
 }
