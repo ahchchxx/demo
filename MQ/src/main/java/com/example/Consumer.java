@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RocketMQMessageListener(topic = "springboot-mq", consumerGroup = "springboot-mq-consumer-1",
-        messageModel= MessageModel.BROADCASTING)
+        messageModel= MessageModel.BROADCASTING) // default: selectorExpression = "*"
 public class Consumer implements RocketMQListener<String> {
 
     @Override
