@@ -16,6 +16,7 @@
 		<module>spring-test</module>
 		<module>BookAttachment</module>
         <module>MQ</module>
+        <module>ClipBoardApp</module>
     </modules>
 
     <parent>

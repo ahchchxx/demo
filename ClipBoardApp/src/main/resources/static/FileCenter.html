@@ -1,0 +1,219 @@
+﻿<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
+    <title>剪贴板与文档管理</title>
+    <link href="./Scripts/FileCenter.css" rel="stylesheet" />
+    <script src="./Scripts/jquery.js"></script>
+    <script type="text/javascript">
+        function myToast() {//弹窗提示
+            var $toast = $('#toast');
+            if ($toast.css('display') != 'none') return;
+
+            $toast.fadeIn(100);
+            setTimeout(function () {
+                $toast.fadeOut(100);
+            }, 666);
+        }
+
+		var appUrl = "http://" + window.location.host + "/";//window.location.protocol + 
+        var initUrl = appUrl + "iCloud/"; // "http://localhost:8080/iCloud/";//files
+        function Load() {
+            $("#ClipBoard").html(" ");//先清空，再加载
+            $.ajax({
+                type: "post",
+                url: initUrl + 'clipboard',
+                data: {
+                    //cmd: "Load",
+                    a: Math.random()
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("Load:" + XMLHttpRequest.status + "-" + XMLHttpRequest.readyState + "-" + textStatus);
+                },
+                success: function (data) {
+                    $("#ClipBoard").html(data);
+                    myToast();
+                    //setTimeout($('#ClipBoard').html(data), 350)
+                }
+            });
+        }
+        //预加载
+        Load();
+
+        function Save() {//提交保存
+            $.ajax({
+                type: "post",
+                url: initUrl + "save",
+                data: {
+                    cmd: "Save",
+                    content: $("#ClipBoard").val(),
+                    a: Math.random()
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("Save:" + XMLHttpRequest.status + "-" + XMLHttpRequest.readyState + "-" + textStatus);
+                },
+                success: function (data) {
+                    Load();
+                }
+            });
+        }
+		
+		document.onkeydown = function (event) {
+			var e = event || window.event || arguments.callee.caller.arguments[0];
+			if (e && e.keyCode == 27) {//esc
+				e.preventDefault()
+				Save()
+			}
+		}
+		
+		// 文件列表
+        function LoadFileList() {
+            $("#fileList").html(" ");//先清空，再加载
+            $.ajax({
+                type: "post",
+                url: initUrl + 'fileList',
+                data: {
+                    //cmd: "Load",
+                    a: Math.random()
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("Load:" + XMLHttpRequest.status + "-" + XMLHttpRequest.readyState + "-" + textStatus);
+                },
+                success: function (data) {
+                    //$("#fileList").html(data);
+					//console.log(data);
+					var fileList = data;// JSON.parse(data);
+					var fileStr = "", tempStr = "";
+					for(var i = 0; i<fileList.length; i++){
+						//console.log(fileList[i]);
+						tempStr = "<p>";
+						tempStr += "<a target='_self' href='"+ initUrl + "del?fileName="+ fileList[i]+"'> &nbsp; × &nbsp; </a> &nbsp; ";
+						tempStr += "<a target='_blank' href='" + initUrl + "getFile?fileName=" + fileList[i] + "'>"
+						tempStr += fileList[i] + "</a></p>";
+						
+						fileStr += tempStr;
+					}
+					$("#fileList").html(fileStr)
+                    // myToast();
+                    //setTimeout($('#ClipBoard').html(data), 350)
+                }
+            });
+        }
+        //预加载
+        LoadFileList();
+
+        function upFile() {
+			// upload by ajax
+			var formData = new FormData();
+			var uploadFile = document.getElementById("file")  // $("#file")
+			if(uploadFile.files.length < 1) {
+                return false;
+			}
+			formData.append("file", uploadFile.files[0]);  //上传一个files对象
+			$.ajax({
+				url: "http://localhost:8080/iCloud/upfile",
+				type: "post",
+				data: formData,
+				processData: false,
+				contentType: false,
+				success: function(res) {
+					// refresh file list
+					if (res.code > 0) {
+						LoadFileList();
+					} else {
+						alert("上传失败" + res.msg);
+					}
+				},
+				error:function(err) {
+					alert("网络连接失败,稍后重试",err);
+				}
+			})
+        }
+    </script>
+</head>
+<body>
+    <!--<form id="form1" action="/iCloud/upfile" method='POST' enctype="multipart/form-data">-->
+    <p>1、剪贴板：&nbsp; &nbsp; 
+        <input type="button" id="btnRefresh" onclick="Load()" value="刷新" /> &nbsp; &nbsp; 
+        <input type="button" id="btnSave" onclick="Save()" value="提交" />
+	</p>
+    <p>
+        <textarea id="ClipBoard" rows="23"></textarea>
+        <!--<asp:TextBox ID="ClipBoard" runat="server" Rows="8" TextMode="MultiLine"></asp:TextBox>-->
+    </p>
+	<!--
+    <p><input type="button" id="btnErase" onclick="Erase()" value="清空!" /> &nbsp; &nbsp; 
+        <input type="button" id="btnAppend" onclick="Append()" value="附加" /> &nbsp; &nbsp;
+    </p>
+	-->
+	
+    <br />
+
+    <p>2、上传文件：<!--<asp:FileUpload ID="fileUpload" runat="server" EnableViewState="False" ViewStateMode="Disabled" /><asp:Button ID="btn" runat="server" Text="上传" onclick="btn_Click" />-->
+		<input type="file" name="file" id="file" onchange="upFile()" /> &nbsp; &nbsp;
+		<!--<input type="submit" value="上传" onclick="upFile()" />-->
+	</p>
+	
+    <p>★文件列表：（点击“×”，将直接删除）</p>
+    <!--<asp:Literal ID="fileLists" runat="server"></asp:Literal>-->
+	<!--
+        <textarea id="fileList" rows="23"></textarea>-->
+	<div id='fileList'></div>
+	
+    <p>·复制文档的请求链接，可以右键/长按</p>
+    <!--</form>-->
+    <!--<img src="/iCloud/qrcode.jpg" />-->
+    
+	<div id="toast" style="display: none;">
+        <div class="weui-mask_transparent"></div>
+        <div class="weui-toast">
+            <i class="weui-icon-success-no-circle weui-icon_toast"></i>
+            <p class="weui-toast__content">已刷新</p>
+        </div>
+    </div>
+</body>
+</html>
+
+
+<!--
+        function Erase() {//清空
+            $.ajax({
+                type: "post",
+                url: initUrl,
+                data: {
+                    cmd: "Erase",
+                    a: Math.random()
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("Erase:" + XMLHttpRequest.status + "-" + XMLHttpRequest.readyState + "-" + textStatus);
+                },
+                success: function (data) {
+                    Load();
+                    //if (data == 1) {
+                    //    Load();
+                    //} else {
+                    //    alert("failed");
+                    //}
+                }
+            });
+        }
+
+        function Append() {//附增
+            $.ajax({
+                type: "post",
+                url: initUrl,
+                data: {
+                    cmd: "Append",
+                    content: $("#ClipBoard").val(),
+                    a: Math.random()
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("Append:" + XMLHttpRequest.status + "-" + XMLHttpRequest.readyState + "-" + textStatus);
+                },
+                success: function (data) {
+                    Load();
+                }
+            });
+        }
+
+-->
