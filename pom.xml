@@ -17,6 +17,7 @@
 		<module>BookAttachment</module>
         <module>MQ</module>
         <module>ClipBoardApp</module>
+        <module>Netty</module>
     </modules>
 
     <parent>
