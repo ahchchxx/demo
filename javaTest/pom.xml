@@ -11,5 +11,13 @@
 
     <artifactId>javaTest</artifactId>
 
+    <dependencies>
+        <!-- com.example.velocity.app  test -->
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity</artifactId>
+            <version>1.7</version>
+        </dependency>
+    </dependencies>
 
 </project>

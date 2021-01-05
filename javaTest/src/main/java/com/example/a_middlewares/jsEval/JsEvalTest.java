@@ -1,8 +1,12 @@
-package com.example.jsEval;
+package com.example.a_middlewares.jsEval;
 
 import cn.hutool.script.ScriptUtil;
 import javax.script.CompiledScript;
 
+/***
+ * ScriptEngine:
+ *  Javascript Engine eval test
+ */
 public class JsEvalTest {
 
     public static void main(String[] args) {
