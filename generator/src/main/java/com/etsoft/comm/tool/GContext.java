@@ -51,8 +51,7 @@ public class GContext {
     public GContext(String table_name, String filePath) throws SQLException {
         this.table_name = table_name;
         this.filePath = filePath;
-        this.l_rset = l_conn.prepareStatement("select * from " + table_name
-                + " limit 1").executeQuery();
+        this.l_rset = l_conn.prepareStatement("select * from " + table_name + " limit 1").executeQuery();
     }
 
     public boolean is_date_exsit() throws SQLException {
