@@ -50,6 +50,7 @@ public class aCreateClass {
 
 			// 生成 dao
 			Render1_Dao.create(gContext);
+			Render1_Mapper.create(gContext);
 
 			// 生成 service
 			Render2_IService.create(gContext);
