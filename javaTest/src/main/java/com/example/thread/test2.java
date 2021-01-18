@@ -24,7 +24,7 @@ public class test2 {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                System.out.println(Thread.currentThread().getName() + " start");
+                print("start");
                 for (i = 1; i <= 10; i++) {
                     System.out.println(i);
                     try {
@@ -33,18 +33,18 @@ public class test2 {
                         e.printStackTrace();
                     }
                 }
-                System.out.println(Thread.currentThread().getName() + " end");
+                print("end");
             }
         }, "Thread-A").start();
 
         new Thread(new Runnable() {
             @Override
             public void run() {
-                System.out.println(Thread.currentThread().getName() + " start");
+                print("start");
                 while (true) { // this works, but effects the efficiency of cpu
                     if (i == 5) break;
                 }
-                System.out.println(Thread.currentThread().getName() + " end");
+                print("end");
             }
         }, "Thread-B").start();
     }
@@ -55,7 +55,7 @@ public class test2 {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                System.out.println(Thread.currentThread().getName() + " start");
+                print("start");
                 for (int i = 1; i <= 10; i++) {
                     // integer.addAndGet(1);
                     // System.out.println(i);
@@ -67,18 +67,18 @@ public class test2 {
                         e.printStackTrace();
                     }
                 }
-                System.out.println(Thread.currentThread().getName() + " end");
+                print("end");
             }
         }, "Thread-A").start();
 
         new Thread(new Runnable() {
             @Override
             public void run() {
-                System.out.println(Thread.currentThread().getName() + " start");
+                print("start");
                 while (true) { // this works, but effects the efficiency of cpu
                     if (integer.get() == 5) break;
                 }
-                System.out.println(Thread.currentThread().getName() + " end");
+                print("end");
             }
         }, "Thread-B").start();
     }
@@ -91,7 +91,7 @@ public class test2 {
             @Override
             public void run() {
                 synchronized (obj) {
-                    System.out.println(Thread.currentThread().getName() + " start");
+                    print("start");
                     if (count < 5) {
                         try {
                             obj.wait(); // Thread-B 暂停，并释放锁
@@ -100,7 +100,7 @@ public class test2 {
                         }
                     }
 
-                    System.out.println(Thread.currentThread().getName() + " end");
+                    print("end");
                     obj.notifyAll();
                 }
             }
@@ -109,7 +109,7 @@ public class test2 {
             @Override
             public void run() {
                 synchronized (obj) {
-                    System.out.println(Thread.currentThread().getName() + " start");
+                    print("start");
                     for (count = 1; count <= 10; count++) {
                         System.out.println(count);
                         if (count == 5) {
@@ -126,7 +126,7 @@ public class test2 {
                             e.printStackTrace();
                         }
                     }
-                    System.out.println(Thread.currentThread().getName() + " end");
+                    print("end");
                 }
             }
         }, "Thread-A").start();
@@ -138,7 +138,7 @@ public class test2 {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                System.out.println(Thread.currentThread().getName() + " start");
+                print("start");
                 if (count < 5) {
                     try {
                         countDownLatch.await();
@@ -147,13 +147,13 @@ public class test2 {
                     }
                 }
 
-                System.out.println(Thread.currentThread().getName() + " end");
+                print("end");
             }
         }, "Thread-B").start();
         new Thread(new Runnable() {
             @Override
             public void run() {
-                System.out.println(Thread.currentThread().getName() + " start");
+                print("start");
                 for (count = 1; count <= 10; count++) {
                     System.out.println(count);
                     if (count == 5)
@@ -164,7 +164,7 @@ public class test2 {
                         e.printStackTrace();
                     }
                 }
-                System.out.println(Thread.currentThread().getName() + " end");
+                print("end");
             }
         }, "Thread-A").start();
     }
@@ -175,7 +175,7 @@ public class test2 {
         ta = new Thread(new Runnable() {
             @Override
             public void run() {
-                System.out.println(Thread.currentThread().getName() + " start");
+                print("start");
                 for (count = 1; count <= 10; count++) {
                     System.out.println(count);
                     if (count == 5) {
@@ -188,18 +188,18 @@ public class test2 {
                         e.printStackTrace();
                     }
                 }
-                System.out.println(Thread.currentThread().getName() + " end");
+                print("end");
             }
         }, "Thread-A");
         tb = new Thread(new Runnable() {
             @Override
             public void run() {
-                System.out.println(Thread.currentThread().getName() + " start");
+                print("start");
                 if (count < 5) {
                     LockSupport.park();
                 }
 
-                System.out.println(Thread.currentThread().getName() + " end");
+                print("end");
                 LockSupport.unpark(ta);
             }
         }, "Thread-B");
@@ -208,4 +208,7 @@ public class test2 {
         ta.start();
     }
 
+    public static void print(String str) {
+        System.out.println(Thread.currentThread().getName() + " " + str);
+    }
 }
