@@ -11,19 +11,18 @@ public class SimpleExecutor implements Executor {
         this.configuration = configuration;
     }
 
-    public GpConfiguration getConfiguration() {
-        return configuration;
-    }
-
-    public void setConfiguration(GpConfiguration configuration) {
-        this.configuration = configuration;
-    }
-
     @Override
     public <E> E query(MapperRegistory.MapperData mapperData, Object parameter) throws Exception {
         //初始化StatementHandler --> ParameterHandler --> ResultSetHandler
         StatementHandler handler = new StatementHandler(configuration);
         // this.configuration.newExecutor(this);
         return (E) handler.query(mapperData, parameter);
+    }
+
+    public GpConfiguration getConfiguration() {
+        return configuration;
+    }
+    public void setConfiguration(GpConfiguration configuration) {
+        this.configuration = configuration;
     }
 }

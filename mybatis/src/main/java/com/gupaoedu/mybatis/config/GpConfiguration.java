@@ -13,9 +13,9 @@ import java.io.IOException;
  */
 public class GpConfiguration {
 
-    public static void main(String[] args) throws Exception {
-        new GpConfiguration().scanPath("com/gupaoedu/mybatis/config/mappers").build();
-    }
+    // public static void main(String[] args) throws Exception {
+    //     new GpConfiguration().scanPath("com/gupaoedu/mybatis/config/mappers").build();
+    // }
 
     protected final MyInterceptorChain interceptorChain = new MyInterceptorChain();
     private String inteceptor = null;
@@ -29,10 +29,10 @@ public class GpConfiguration {
         return (Object) interceptorChain.pluginAll(object);
     }
 
-    public GpConfiguration scanPath(String scanPath) {
-        this.scanPath = scanPath;
-        return this;
-    }
+    // public GpConfiguration scanPath(String scanPath) {
+    //     this.scanPath = scanPath;
+    //     return this;
+    // }
 
     public void build() throws Exception {
         if (null == scanPath || scanPath.length() < 1) {
