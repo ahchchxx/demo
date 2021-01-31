@@ -11,7 +11,7 @@ public class App {
             splitList.add(new ParamVo());
         }
 
-        MultiThread<ParamVo, ResultVo> multiThread = new MultiThread<>(splitList) {
+        MultiThread<ParamVo, ResultVo> multiThread = new MultiThread<ParamVo, ResultVo>(splitList) {
             @Override
             public ResultVo outExecute(int currentThread, ParamVo data) {
                 System.out.println("当前线程号=" + currentThread + " data=" + data);

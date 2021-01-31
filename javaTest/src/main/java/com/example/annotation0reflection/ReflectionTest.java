@@ -57,7 +57,7 @@ public class ReflectionTest {
         Annotation[] annotations = method.getDeclaredAnnotations();
         boolean annotationPresent = method.isAnnotationPresent(Override.class);
         Deprecated annotation = method.getAnnotation(Deprecated.class);
-        String since = annotation.since();
+        // String since = annotation.since();
         // annotation.xxx
     }
 
