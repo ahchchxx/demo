@@ -14,7 +14,8 @@ public class ReflectionTest {
         Annotation[] declaredAnnotations = cls.getDeclaredAnnotations();
 
         // 1
-        getField(cls);
+        getFields(cls);
+        getAllFields(cls); // get all fields in current class and all its father's fields
 
         // 2
         getMethods(cls);
@@ -24,7 +25,7 @@ public class ReflectionTest {
     }
 
 
-    private static void getField(Class<ReflectionTest> cls) throws Exception {
+    private static void getFields(Class<ReflectionTest> cls) throws Exception {
         // get fields, read & write data
         Field[] declaredFields = cls.getDeclaredFields();
         Field f = declaredFields[0];
@@ -37,6 +38,16 @@ public class ReflectionTest {
         // get annotation for Field
         boolean annotationPresent = f.isAnnotationPresent(Deprecated.class);
         Annotation[] declaredAnnotations = f.getDeclaredAnnotations();
+    }
+    private static void getAllFields(Class<? extends Object> cls) throws Exception {
+        // Object.class.getSuperclass() is null
+        while(cls.getSuperclass() != null && !cls.getSimpleName().equals("Object") ) {
+            for (Field f : cls.getDeclaredFields()) {
+                System.out.println(f.getName());
+            }
+
+            cls = cls.getSuperclass();
+        }
     }
 
     private static void getMethods(Class<ReflectionTest> cls) throws NoSuchMethodException {
