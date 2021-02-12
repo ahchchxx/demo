@@ -12,6 +12,9 @@ import org.apache.poi.ss.usermodel.*;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
+/**
+ * parse excel with merged cells
+ */
 public class app {
     public static void main(String[] args) throws Exception {
         File file = new File("D:\\workstation\\demo\\javaTest\\src\\main\\resources\\DemoImport.xls");
@@ -23,12 +26,12 @@ public class app {
         int titleRowIndex = 1; // start from 0
         Row titleRow = sheet.getRow(titleRowIndex);
         // List<String> colTitle = new ArrayList<>();
-        Map<String, Integer> colTitle = new LinkedHashMap<>();
+        Map<String, Integer> colTitle = new LinkedHashMap<>();// map with order item
         for (int i = 0; i < titleRow.getLastCellNum(); i++) {
             int colIndex = i + 1;
             Cell cell = titleRow.getCell(i);
             if (StringUtils.isEmpty(cell) || StringUtils.isEmpty(cell.toString())) {
-                cell = sheet.getRow(titleRowIndex - 1).getCell(i);
+                cell = sheet.getRow(titleRowIndex - 1).getCell(i);// get title from previous row
             }
             if (StringUtils.isEmpty(cell) || StringUtils.isEmpty(cell.toString())) {
                 throw new Exception("Title is empty at col: " + colIndex);
@@ -42,7 +45,6 @@ public class app {
             } else {
                 colTitle.put(title, 0);
             }
-
         }
 
         // parse row data
@@ -57,7 +59,7 @@ public class app {
             list.add(curRow);
         }
 
-        // List<NNCalendar> dataList = parseData(colTitle.keySet(), list, NNCalendar.class);
+        // Convert data from Excel to Entity list
         List<UserEntity> dataList = parseData(colTitle.keySet(), list, UserEntity.class);
         System.out.println(dataList.size());
     }
