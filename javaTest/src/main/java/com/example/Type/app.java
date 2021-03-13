@@ -15,6 +15,7 @@ public class app {
         print("Short: ", Short.SIZE); // 16
         print("Character: ", Character.SIZE); // 16
         print("Integer: ", Integer.SIZE); // 32
+        print("Long: ", Long.SIZE); // 64
     }
 
     public static void print(String str, Object obj) {
